@@ -1,0 +1,20 @@
+apiVersion: keycloak.org/v1alpha1
+kind: Keycloak
+metadata:
+  labels:
+      app: sso
+  name: {{ default "keycloak" .Values.keycloak.name }}
+  namespace: {{ default "keycloak" .Values.keycloak.namespace }}
+spec:
+  externalAccess:
+    enabled: true
+  keycloakDeploymentSpec:
+    imagePullPolicy: Always
+  postgresDeploymentSpec:
+    imagePullPolicy: Always  
+  externalDatabase:
+    enabled: {{ default 'False' .Values.database.external }}
+  instances: {{ default '1' .Values.keycloak.replicaCount }}
+    externalAccess:
+    enabled: true
+  storageClassName: {{ .Values.storageClassName }}
