@@ -9,9 +9,9 @@ spec:
   externalAccess:
     enabled: true
   keycloakDeploymentSpec:
-    imagePullPolicy: Always
+    imagePullPolicy: {{ .Values.keycloak.imagePullPolicy }}
   postgresDeploymentSpec:
-    imagePullPolicy: Always  
+    imagePullPolicy: {{ .Values.database.imagePullPolicy }}  
   externalDatabase:
     enabled: {{ default 'False' .Values.database.external }}
   instances: {{ default '1' .Values.keycloak.replicaCount }}

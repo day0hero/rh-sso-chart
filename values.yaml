@@ -4,14 +4,43 @@
 
 keycloak:
   replicaCount: 1
+  imagePullPolicy: Always
   name: keycloak
   namespace: keycloak
 
-database: {}
+database:
+  imagePullPolicy: Always
 # If deploying this to a production enviroment, we will need to configure an external postgres database
-  # external: 
+  # external:
 
-storageClassName: gp3-csi
+
+sso:
+  client:
+    name:
+    id:
+    secret:
+  realm:
+    name:
+    id:
+    enabled: #Default true
+    displayName: "" 
+
+
+ssoUsers:
+  name: {}
+  first: {}
+  lastName: {}
+  email: {}
+  enabled: #Default true
+  emailVerified: #Default false
+  realmRoles: #Default "offline_access"
+  clientRoles:
+    account:
+    realm-management:
+    
+#storageClassName: gp3-csi
+
+
 
 image:
   repository: nginx

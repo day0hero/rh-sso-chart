@@ -1,17 +1,15 @@
 apiVersion: keycloak.org/v1alpha1
 kind: KeycloakClient
 metadata:
-  name: example-client
+  name: {{ .Values.sso.client.name }}
   labels:
     app: sso
 spec:
   realmSelector:
      matchLabels:
-      app: <matching labels for KeycloakRealm custom resource>
+      app: sso
   client:
     # auto-generated if not supplied
     #id: 123
-    clientId: client-secret
-    secret: client-secret
-    # ...
-    # other properties of Keycloak Client
+    clientId: {{ .Values.sso.client.id }} #could potentially be eso
+    secret: {{ .Values.sso.client.secret }} #could potentially be eso
