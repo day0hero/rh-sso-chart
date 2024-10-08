@@ -5,6 +5,8 @@ metadata:
       app: sso
   name: {{ default "keycloak" .Values.keycloak.name }}
   namespace: {{ default "keycloak" .Values.keycloak.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   externalAccess:
     enabled: true
@@ -13,8 +15,6 @@ spec:
   postgresDeploymentSpec:
     imagePullPolicy: {{ .Values.database.imagePullPolicy }}  
   externalDatabase:
-    enabled: {{ default 'False' .Values.database.external }}
-  instances: {{ default '1' .Values.keycloak.replicaCount }}
-    externalAccess:
-    enabled: true
+    enabled: {{ default false .Values.database.external }}
+  instances: {{ default 1 .Values.keycloak.replicaCount }}
   storageClassName: {{ .Values.storageClassName }}

@@ -1,145 +1,63 @@
 # Default values for rh-sso.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+global:
+  pattern: true
 
+# If we're not deploying as part of the patterns framework, we may need to create the namespace
+namespace:
+  create: false
+
+# Keycloak instance configuration
 keycloak:
   replicaCount: 1
   imagePullPolicy: Always
   name: keycloak
-  namespace: keycloak
+  namespace: rhsso
 
 database:
   imagePullPolicy: Always
 # If deploying this to a production enviroment, we will need to configure an external postgres database
   # external:
 
-
+# See examples below for adding multiple clients, realms and users
 sso:
   client:
-    name:
-    id:
-    secret:
+  - name: vp-default-client
   realm:
-    name:
-    id:
-    enabled: #Default true
-    displayName: "" 
+  - name: vp-default-realm
+    id: vp-default-realm
+    enabled: true #Default true
+    displayName: Default Validated Patterns Realm
+  users:
+  - userName: default-vp-user
+    firstName: Default
+    lastName: PatternUser
+    email: default@example.com
+    enabled: true #Default true
+    emailVerified: false #Default false
+    realmRoles: "offline_access" #Default "offline_access"
+    clientRoles:
+      account: "manage-account"
+      realm-management: "manage-users"
+
+#storageClass to use with keycloak deployed postgresql
+storageClassName: gp3-csi
 
 
-ssoUsers:
-  name: {}
-  first: {}
-  lastName: {}
-  email: {}
-  enabled: #Default true
-  emailVerified: #Default false
-  realmRoles: #Default "offline_access"
-  clientRoles:
-    account:
-    realm-management:
-    
-#storageClassName: gp3-csi
+# Example configs:
+# You can add multiple clients, realms and users but adding another item in the list:
+# sso:
+#   client:
+#   - name: client01
+#   - name: client02
+#   realm:
+#   - name: realm01
+#     id: realm01
+#     enabled: true
+#     displayName: realm 01
+#   - name: realm02
+#     id: realm02
+#     enabled: true
+#     displayName: realm 02
 
-
-
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-podAnnotations: {}
-podLabels: {}
-
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
-service:
-  type: ClusterIP
-  port: 80
-
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
