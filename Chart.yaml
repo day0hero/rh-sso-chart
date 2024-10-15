@@ -1,6 +1,6 @@
 apiVersion: v2
-name: rh-sso
-description: A Helm chart for Kubernetes
+name: rh-sso-chart
+description: Red Hat Single Sign On Chart for Validated Patterns Usage
 
 # A chart can be either an 'application' or a 'library' chart.
 #
